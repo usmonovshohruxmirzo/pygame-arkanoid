@@ -34,101 +34,34 @@ paddle = Paddle(screen_width, screen_height)
 ball = Ball(screen_width, screen_height)
 
 def pattern_1():
-    bricks = []
-    for row in range(6):
-        for col in range(10):
-            x, y = col * 80 + 5, row * 25 + 50
-            color = BRICK_COLORS[row % len(BRICK_COLORS)]
-            bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10)]
 
 def pattern_2():
-    bricks = []
-    for row in range(6):
-        for col in range(row + 1):
-            x = (screen_width // 2) - (row * 40) + col * 80
-            y = row * 25 + 50
-            color = BRICK_COLORS[row % len(BRICK_COLORS)]
-            bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick((screen_width // 2) - (row * 40) + col * 80, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
 def pattern_3():
-    bricks = []
-    for row in range(6):
-        for col in range(10):
-            if (row + col) % 2 == 0:
-                x, y = col * 80 + 5, row * 25 + 50
-                color = BRICK_COLORS[row % len(BRICK_COLORS)]
-                bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row + col) % 2 == 0]
 
 def pattern_4():
-    bricks = []
-    for row in range(6):
-        for col in range(10):
-            if row in [0, 5] or col in [0, 9]:
-                x, y = col * 80 + 5, row * 25 + 50
-                color = BRICK_COLORS[row % len(BRICK_COLORS)]
-                bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if row in [0, 5] or col in [0, 9]]
 
 def pattern_5():
-    bricks = []
-    for row in range(6):
-        for col in range(row + 1):
-            x, y = col * 80 + 5, row * 25 + 50
-            color = BRICK_COLORS[row % len(BRICK_COLORS)]
-            bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
 def pattern_6():
-    bricks = []
-    for row in range(6):
-        for col in range(10 - row):
-            x, y = col * 80 + row * 40 + 5, row * 25 + 50
-            color = BRICK_COLORS[row % len(BRICK_COLORS)]
-            bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + row * 40 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10 - row)]
 
 def pattern_7():
-    bricks = []
-    for row in range(6):
-        for col in range(10):
-            if (row % 2 == 0 and col % 3 != 1) or (row % 2 == 1 and col % 3 == 1):
-                x, y = col * 80 + 5, row * 25 + 50
-                color = BRICK_COLORS[row % len(BRICK_COLORS)]
-                bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row % 2 == 0 and col % 3 != 1) or (row % 2 == 1 and col % 3 == 1)]
 
 def pattern_8():
-    bricks = []
-    for row in range(6):
-        for col in range(10):
-            if col % 2 == 0:
-                x, y = col * 80 + 5, row * 25 + 50
-                color = BRICK_COLORS[row % len(BRICK_COLORS)]
-                bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if col % 2 == 0]
 
 def pattern_9():
-    bricks = []
-    for row in range(6):
-        if row % 2 == 0:
-            for col in range(10):
-                x, y = col * 80 + 5, row * 25 + 50
-                color = BRICK_COLORS[row % len(BRICK_COLORS)]
-                bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) if row % 2 == 0 for col in range(10)]
 
 def pattern_10():
-    bricks = []
-    for _ in range(30):
-        col = random.randint(0, 9)
-        row = random.randint(0, 5)
-        x, y = col * 80 + 5, row * 25 + 50
-        color = random.choice(BRICK_COLORS)
-        bricks.append(Brick(x, y, 75, 20, color))
-    return bricks
+    return [Brick(random.randint(0, 9) * 80 + 5, random.randint(0, 5) * 25 + 50, 75, 20, random.choice(BRICK_COLORS)) for _ in range(30)]
 
 levels = [pattern_1, pattern_2, pattern_3, pattern_4, pattern_5,
           pattern_6, pattern_7, pattern_8, pattern_9, pattern_10]
@@ -141,7 +74,6 @@ game_state = 'title_screen'
 score, lives = 0, 3
 display_message, message_timer, firework_timer = "", 0, 0
 
-# -- Main Loop --
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -282,6 +214,13 @@ while True:
         screen.blit(lives_text, (screen_width - lives_text.get_width() - 10, 10))
         level_text = game_font.render(f"Level: {current_level + 1}", True, (255, 255, 255))
         screen.blit(level_text, (screen_width // 2 - 50, 10))
+
+        if mute:
+            muted_text = message_font.render("MUTED", True, (255, 0, 0))
+            screen.blit(
+                muted_text,
+                (screen_width - muted_text.get_width() - 10, screen_height - muted_text.get_height() - 10)
+            )
 
     elif game_state in ['game_over', 'you_win']:
         if game_state == 'you_win':
