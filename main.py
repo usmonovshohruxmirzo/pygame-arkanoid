@@ -11,6 +11,9 @@ screen_width, screen_height = 800, 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("PyGame Arkanoid")
 
+cover_image = pygame.image.load("./assets/start.png").convert_alpha()
+cover_image = pygame.transform.scale(cover_image, (screen_width, screen_height))
+
 BG_COLOR = pygame.Color('grey12')
 BRICK_COLORS = [(178, 34, 34), (255, 165, 0), (255, 215, 0), (50, 205, 50)]
 
@@ -74,6 +77,12 @@ game_state = 'title_screen'
 score, lives = 0, 3
 display_message, message_timer, firework_timer = "", 0, 0
 
+level_images = []
+for i in range(10):
+    img = pygame.image.load(f"./levels/level_1.png").convert_alpha()
+    img = pygame.transform.scale(img, (100, 60))
+    level_images.append(img)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -95,7 +104,7 @@ while True:
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
-                elif event.key == pygame.K_0:  # Level 10
+                elif event.key == pygame.K_0:
                     chosen_level = 9
                     current_level = chosen_level
                     bricks = levels[current_level]()
@@ -122,20 +131,90 @@ while True:
     screen.fill(BG_COLOR)
 
     if game_state == 'title_screen':
-        title_surface = title_font.render("ARKANOID", True, (255, 255, 255))
-        title_rect = title_surface.get_rect(center=(screen_width / 2, screen_height / 2 - 50))
-        screen.blit(title_surface, title_rect)
-        start_surface = game_font.render("Press SPACE to Start", True, (255, 255, 255))
+        screen.blit(cover_image, (0, 0))
+        
+        start_text = "Press SPACE to Start"
+        start_surface = game_font.render(start_text, True, (0, 0, 0))
         start_rect = start_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 20))
+        
+        button_padding = 30
+        button_rect = pygame.Rect(
+            start_rect.left - button_padding // 2,
+            start_rect.top - button_padding // 2,
+            start_rect.width + button_padding,
+            start_rect.height + button_padding
+        )
+        pygame.draw.rect(screen, (255, 255, 255), button_rect, border_radius=12)
+        pygame.draw.rect(screen, (0, 0, 0), button_rect, 3, border_radius=12)
+        
         screen.blit(start_surface, start_rect)
-        mute_surface = message_font.render("Press M to Mute/Unmute in-game", True, (255, 255, 255))
-        mute_rect = mute_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 60))
+
+        mute_text = "Press M to Mute/Unmute in-game"
+        mute_surface = message_font.render(mute_text, True, (0, 0, 0))
+        mute_rect = mute_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 90))
+
+        mute_button_rect = pygame.Rect(
+            mute_rect.left - button_padding // 2,
+            mute_rect.top - button_padding // 2,
+            mute_rect.width + button_padding,
+            mute_rect.height + button_padding
+        )
+        pygame.draw.rect(screen, (255, 255, 255), mute_button_rect, border_radius=12)
+        pygame.draw.rect(screen, (0, 0, 0), mute_button_rect, 3, border_radius=12)
+
         screen.blit(mute_surface, mute_rect)
 
+
     elif game_state == 'level_select':
-        select_surface = title_font.render("Select Level (1-9 or 0 for 10)", True, (255, 255, 255))
-        select_rect = select_surface.get_rect(center=(screen_width / 2, screen_height / 2 - 100))
+        select_surface = title_font.render("Select Level", True, (255, 255, 255))
+        select_rect = select_surface.get_rect(center=(screen_width / 2, 60))
         screen.blit(select_surface, select_rect)
+
+        num_levels = 10
+        cols = 5
+        rows = 2
+        box_width = 120
+        box_height = 100
+        padding_x = 40
+        padding_y = 40
+        start_x = (screen_width - (box_width + padding_x) * cols + padding_x) // 2
+        start_y = 150
+
+        level_boxes = []
+
+        for i in range(num_levels):
+            col = i % cols
+            row = i // cols
+            x = start_x + col * (box_width + padding_x)
+            y = start_y + row * (box_height + padding_y)
+
+            rect = pygame.Rect(x, y, box_width, box_height)
+            level_boxes.append((rect, i))
+
+            pygame.draw.rect(screen, (200, 200, 200), rect)
+            pygame.draw.rect(screen, (255, 255, 255), rect, 3)
+
+            image = level_images[i]
+            img_rect = image.get_rect(center=(x + box_width // 2, y + box_height // 2 - 10))
+            screen.blit(image, img_rect)
+
+            level_text = message_font.render(f"Level {i+1}", True, (0, 0, 0))
+            text_rect = level_text.get_rect(center=(x + box_width // 2, y + box_height - 15))
+            screen.blit(level_text, text_rect)
+
+        if pygame.mouse.get_pressed()[0]:
+            mouse_pos = pygame.mouse.get_pos()
+            for rect, level_index in level_boxes:
+                if rect.collidepoint(mouse_pos):
+                    chosen_level = level_index
+                    current_level = chosen_level
+                    bricks = levels[current_level]()
+                    paddle.reset()
+                    ball.reset()
+                    score, lives = 0, 3
+                    power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
+                    game_state = 'playing'
+                    break
 
     elif game_state == 'playing':
         paddle.update()
