@@ -46,6 +46,7 @@ bounce_sound = load_sound('bounce.wav')
 brick_break_sound = load_sound('brick_break.wav')
 game_over_sound = load_sound('game_over.wav')
 laser_sound = load_sound('laser.wav')
+win_sound = load_sound('win.mp3')
 
 paddle = Paddle(screen_width, screen_height)
 balls = [Ball(screen_width, screen_height)]
@@ -340,6 +341,7 @@ while True:
 
         if not bricks:
             game_state = 'you_win'
+            if not mute: win_sound.play()
 
         paddle.draw(screen)
         for ball in balls:
