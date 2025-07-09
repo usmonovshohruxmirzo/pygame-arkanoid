@@ -12,6 +12,17 @@ A modern, feature-rich Arkanoid/Breakout clone built with Python and PyGame.
 - **Laser Cannons**: Shoot bricks when powered up
 - **Responsive Controls** and smooth gameplay
 
+## Requirements
+- Python 3.7+
+- [PyGame](https://www.pygame.org/) (see requirements.txt)
+
+## Installation
+1. **Clone or download this repository**
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
 ## Controls
 - **Arrow Keys**: Move paddle left/right
 - **Space**: Launch ball (when glued) or start game/return to title
@@ -30,12 +41,8 @@ A modern, feature-rich Arkanoid/Breakout clone built with Python and PyGame.
 - **Shrink (-)**: Paddle shrinks
 
 ## How to Run
-1. **Install Python 3.7+**
-2. **Install PyGame**:
-   ```bash
-   pip install pygame
-   ```
-3. **Run the game**:
+1. **Make sure you have installed the requirements above**
+2. **Run the game**:
    ```bash
    python main.py
    ```
