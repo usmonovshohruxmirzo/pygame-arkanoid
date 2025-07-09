@@ -32,6 +32,7 @@ A modern, feature-rich Arkanoid/Breakout clone built with Python and PyGame.
 - **F**: Fire lasers (when laser power-up is active)
 - **Mouse**: Click level preview to select level in level select screen
 - **1-9, 0**: Select level by number in level select screen
+- **P**: Pause/unpause the game (shows 'PAUSED')
 
 ## Power-ups
 - **Grow (G)**: Paddle grows larger
