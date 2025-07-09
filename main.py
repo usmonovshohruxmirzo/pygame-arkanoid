@@ -14,6 +14,15 @@ pygame.display.set_caption("PyGame Arkanoid")
 cover_image = pygame.image.load("./assets/start.png").convert_alpha()
 cover_image = pygame.transform.scale(cover_image, (screen_width, screen_height))
 
+game_bg_image = pygame.image.load("./assets/field.png").convert()
+game_bg_image = pygame.transform.scale(game_bg_image, (screen_width, screen_height))
+
+game_over_bg_image = pygame.image.load("./assets/gameover.png").convert()
+game_over_bg_image = pygame.transform.scale(game_over_bg_image, (screen_width, screen_height))
+
+you_win_bg_image = pygame.image.load("./assets/start.png").convert()
+you_win_bg_image = pygame.transform.scale(you_win_bg_image, (screen_width, screen_height))
+
 BG_COLOR = pygame.Color('grey12')
 BRICK_COLORS = [(178, 34, 34), (255, 165, 0), (255, 215, 0), (50, 205, 50)]
 
@@ -217,6 +226,8 @@ while True:
                     break
 
     elif game_state == 'playing':
+        screen.blit(game_bg_image, (0, 0))
+
         paddle.update()
         keys = pygame.key.get_pressed()
         ball_status, collision_object = ball.update(paddle, keys[pygame.K_SPACE])
@@ -302,6 +313,11 @@ while True:
             )
 
     elif game_state in ['game_over', 'you_win']:
+        if game_state == 'game_over':
+            screen.blit(game_over_bg_image, (0, 0))
+        else:
+            screen.blit(you_win_bg_image, (0, 0))
+        
         if game_state == 'you_win':
             firework_timer -= 1
             if firework_timer <= 0:
@@ -313,14 +329,16 @@ while True:
                     fireworks.remove(firework)
             for firework in fireworks:
                 firework.draw(screen)
-
+        
         message = "GAME OVER" if game_state == 'game_over' else "YOU WIN!"
         text_surface = game_font.render(message, True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2 - 20))
         screen.blit(text_surface, text_rect)
+
         restart_surface = game_font.render("Press SPACE to return to Title", True, (255, 255, 255))
         restart_rect = restart_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 30))
         screen.blit(restart_surface, restart_rect)
+
 
     if message_timer > 0:
         message_timer -= 1
