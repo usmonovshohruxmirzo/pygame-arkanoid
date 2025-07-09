@@ -7,7 +7,7 @@ from game_objects import Paddle, Ball, Brick, PowerUp, Laser, Particle, Firework
 pygame.init()
 pygame.mixer.init()
 clock = pygame.time.Clock()
-screen_width, screen_height = 805, 600
+screen_width, screen_height = 850, 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("PyGame Arkanoid")
 
@@ -50,35 +50,48 @@ laser_sound = load_sound('laser.wav')
 paddle = Paddle(screen_width, screen_height)
 balls = [Ball(screen_width, screen_height)]
 
+edge_left_img = pygame.image.load("./assets/game/edge_left.png").convert_alpha()
+edge_right_img = pygame.image.load("./assets/game/edge_right.png").convert_alpha()
+left_new_height = int(edge_left_img.get_height() * 0.924)
+right_new_height = int(edge_right_img.get_height() * 0.924)
+edge_left_img = pygame.transform.scale(edge_left_img, (edge_left_img.get_width(), left_new_height))
+edge_right_img = pygame.transform.scale(edge_right_img, (edge_right_img.get_width(), right_new_height))
+edge_top_img = pygame.image.load("./assets/game/edge_top.png").convert_alpha()
+edge_top_img = pygame.transform.scale(edge_top_img, (screen_width, edge_top_img.get_height()))
+
+left_offset = edge_left_img.get_width()
+right_offset = edge_right_img.get_width()
+top_offset = edge_top_img.get_height()
+
 def pattern_1():
-    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10)]
 
 def pattern_2():
-    return [Brick((screen_width // 2) - (row * 40) + col * 80, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
+    return [Brick(left_offset + (screen_width - left_offset - right_offset) // 2 - (row * 40) + col * 80, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
 def pattern_3():
-    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row + col) % 2 == 0]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row + col) % 2 == 0]
 
 def pattern_4():
-    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if row in [0, 5] or col in [0, 9]]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if row in [0, 5] or col in [0, 9]]
 
 def pattern_5():
-    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
 def pattern_6():
-    return [Brick(col * 80 + row * 40 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10 - row)]
+    return [Brick(left_offset + col * 80 + row * 40 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10 - row)]
 
 def pattern_7():
-    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row % 2 == 0 and col % 3 != 1) or (row % 2 == 1 and col % 3 == 1)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row % 2 == 0 and col % 3 != 1) or (row % 2 == 1 and col % 3 == 1)]
 
 def pattern_8():
-    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if col % 2 == 0]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if col % 2 == 0]
 
 def pattern_9():
-    return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) if row % 2 == 0 for col in range(10)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) if row % 2 == 0 for col in range(10)]
 
 def pattern_10():
-    return [Brick(random.randint(0, 9) * 80 + 5, random.randint(0, 5) * 25 + 50, 75, 20, random.choice(BRICK_COLORS)) for _ in range(30)]
+    return [Brick(left_offset + random.randint(0, 9) * 80 + 5, top_offset + random.randint(0, 5) * 25 + 10, 75, 20, random.choice(BRICK_COLORS)) for _ in range(30)]
 
 levels = [pattern_1, pattern_2, pattern_3, pattern_4, pattern_5,
           pattern_6, pattern_7, pattern_8, pattern_9, pattern_10]
@@ -234,7 +247,15 @@ while True:
                     break
 
     elif game_state == 'playing':
-        screen.blit(game_bg_image, (0, 0))
+        # Draw border images
+        left_y = (screen_height - edge_left_img.get_height()) // 2
+        right_y = (screen_height - edge_right_img.get_height()) // 2
+        screen.blit(edge_left_img, (0, left_y))
+        screen.blit(edge_right_img, (screen_width - edge_right_img.get_width(), right_y))
+        top_x = edge_left_img.get_width()
+        top_width = screen_width - edge_left_img.get_width() - edge_right_img.get_width()
+        edge_top_scaled = pygame.transform.scale(edge_top_img, (top_width, edge_top_img.get_height()))
+        screen.blit(edge_top_scaled, (top_x, 0))
 
         paddle.update()
         keys = pygame.key.get_pressed()
