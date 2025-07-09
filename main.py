@@ -11,19 +11,19 @@ screen_width, screen_height = 850, 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("PyGame Arkanoid")
 
-cover_image = pygame.image.load("./assets/graphics/start.png").convert_alpha()
+cover_image = pygame.image.load("./assets/images/graphics/start.png").convert_alpha()
 cover_image = pygame.transform.scale(cover_image, (screen_width, screen_height))
 
-game_bg_image = pygame.image.load("./assets/graphics/field.png").convert()
+game_bg_image = pygame.image.load("./assets/images/graphics/field.png").convert()
 game_bg_image = pygame.transform.scale(game_bg_image, (screen_width, screen_height))
 
-game_over_bg_image = pygame.image.load("./assets/graphics/gameover.png").convert()
+game_over_bg_image = pygame.image.load("./assets/images/graphics/gameover.png").convert()
 game_over_bg_image = pygame.transform.scale(game_over_bg_image, (screen_width, screen_height))
 
-you_win_bg_image = pygame.image.load("./assets/graphics/start.png").convert()
+you_win_bg_image = pygame.image.load("./assets/images/graphics/start.png").convert()
 you_win_bg_image = pygame.transform.scale(you_win_bg_image, (screen_width, screen_height))
 
-paddle_image = pygame.image.load("./assets/graphics/paddle.png").convert_alpha()
+paddle_image = pygame.image.load("./assets/images/graphics/paddle.png").convert_alpha()
 
 BG_COLOR = pygame.Color('grey12')
 BRICK_COLORS = [(178, 34, 34), (255, 165, 0), (255, 215, 0), (50, 205, 50)]
@@ -42,11 +42,11 @@ def load_sound(file):
                 pass
         return DummySound()
 
-bounce_sound = load_sound('bounce.wav')
-brick_break_sound = load_sound('brick_break.wav')
-game_over_sound = load_sound('game_over.wav')
-laser_sound = load_sound('laser.wav')
-win_sound = load_sound('win.mp3')
+bounce_sound = load_sound('./assets/sounds/bounce.wav')
+brick_break_sound = load_sound('./assets/sounds/brick_break.wav')
+game_over_sound = load_sound('./assets/sounds/game_over.wav')
+laser_sound = load_sound('./assets/sounds/laser.wav')
+win_sound = load_sound('./assets/sounds/win.mp3')
 
 paddle = Paddle(screen_width, screen_height)
 balls = [Ball(screen_width, screen_height)]
@@ -107,11 +107,11 @@ display_message, message_timer, firework_timer = "", 0, 0
 
 level_images = []
 for i in range(10):
-    img = pygame.image.load(f"./levels/level_{i+1}.png").convert_alpha()
+    img = pygame.image.load(f"./assets/images/levels/level_{i+1}.png").convert_alpha()
     img = pygame.transform.scale(img, (100, 60))
     level_images.append(img)
 
-button_img = pygame.image.load("./assets/graphics/button.png").convert_alpha()
+button_img = pygame.image.load("./assets/images/graphics/button.png").convert_alpha()
 
 while True:
     for event in pygame.event.get():
