@@ -7,7 +7,7 @@ from game_objects import Paddle, Ball, Brick, PowerUp, Laser, Particle, Firework
 pygame.init()
 pygame.mixer.init()
 clock = pygame.time.Clock()
-screen_width, screen_height = 800, 600
+screen_width, screen_height = 805, 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("PyGame Arkanoid")
 
@@ -23,6 +23,8 @@ game_over_bg_image = pygame.transform.scale(game_over_bg_image, (screen_width, s
 you_win_bg_image = pygame.image.load("./assets/start.png").convert()
 you_win_bg_image = pygame.transform.scale(you_win_bg_image, (screen_width, screen_height))
 
+paddle_image = pygame.image.load("./assets/paddle.png").convert_alpha()
+
 BG_COLOR = pygame.Color('grey12')
 BRICK_COLORS = [(178, 34, 34), (255, 165, 0), (255, 215, 0), (50, 205, 50)]
 
@@ -35,7 +37,10 @@ def load_sound(file):
     try:
         return pygame.mixer.Sound(file)
     except:
-        return type('', (), {'play': lambda self: None})()
+        class DummySound:
+            def play(self):
+                pass
+        return DummySound()
 
 bounce_sound = load_sound('bounce.wav')
 brick_break_sound = load_sound('brick_break.wav')
@@ -43,7 +48,7 @@ game_over_sound = load_sound('game_over.wav')
 laser_sound = load_sound('laser.wav')
 
 paddle = Paddle(screen_width, screen_height)
-ball = Ball(screen_width, screen_height)
+balls = [Ball(screen_width, screen_height)]
 
 def pattern_1():
     return [Brick(col * 80 + 5, row * 25 + 50, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10)]
@@ -109,7 +114,7 @@ while True:
                     current_level = chosen_level
                     bricks = levels[current_level]()
                     paddle.reset()
-                    ball.reset()
+                    balls = [Ball(screen_width, screen_height)]
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
@@ -118,7 +123,7 @@ while True:
                     current_level = chosen_level
                     bricks = levels[current_level]()
                     paddle.reset()
-                    ball.reset()
+                    balls = [Ball(screen_width, screen_height)]
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
@@ -128,14 +133,17 @@ while True:
                     game_state = 'title_screen'
 
             elif game_state == 'playing':
-                if event.key == pygame.K_f and paddle.has_laser:
+                if event.key == pygame.K_f and paddle.has_laser and paddle.laser_cooldown <= 0:
                     lasers.append(Laser(paddle.rect.centerx - 30, paddle.rect.top))
                     lasers.append(Laser(paddle.rect.centerx + 30, paddle.rect.top))
+                    paddle.laser_cooldown = 15
                     if not mute: laser_sound.play()
                 if event.key == pygame.K_m:
                     mute = not mute
-                if ball.is_glued and event.key == pygame.K_SPACE:
-                    ball.is_glued = False
+                if any(ball.is_glued for ball in balls) and event.key == pygame.K_SPACE:
+                    for ball in balls:
+                        if ball.is_glued:
+                            ball.is_glued = False
 
     screen.fill(BG_COLOR)
 
@@ -219,7 +227,7 @@ while True:
                     current_level = chosen_level
                     bricks = levels[current_level]()
                     paddle.reset()
-                    ball.reset()
+                    balls = [Ball(screen_width, screen_height)]
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
@@ -230,33 +238,42 @@ while True:
 
         paddle.update()
         keys = pygame.key.get_pressed()
-        ball_status, collision_object = ball.update(paddle, keys[pygame.K_SPACE])
 
-        if ball_status == 'lost':
+        balls_to_remove = []
+        for ball in balls:
+            ball_status, collision_object = ball.update(paddle, keys[pygame.K_SPACE])
+            if ball_status == 'lost':
+                balls_to_remove.append(ball)
+            elif collision_object in ['wall', 'paddle']:
+                if not mute: bounce_sound.play()
+                for _ in range(5):
+                    particles.append(Particle(ball.rect.centerx, ball.rect.centery, (255, 255, 0), 1, 3, 1, 3, 0))
+
+        for ball in balls_to_remove:
+            balls.remove(ball)
+
+        if len(balls) == 0:
             lives -= 1
             if lives <= 0:
                 game_state = 'game_over'
                 if not mute: game_over_sound.play()
             else:
-                ball.reset()
+                balls = [Ball(screen_width, screen_height)]
                 paddle.reset()
-        elif collision_object in ['wall', 'paddle']:
-            if not mute: bounce_sound.play()
-            for _ in range(5):
-                particles.append(Particle(ball.rect.centerx, ball.rect.centery, (255, 255, 0), 1, 3, 1, 3, 0))
 
-        for brick in bricks[:]:
-            if ball.rect.colliderect(brick.rect):
-                ball.speed_y *= -1
-                for _ in range(15):
-                    particles.append(Particle(brick.rect.centerx, brick.rect.centery, brick.color, 1, 4, 1, 4, 0.05))
-                bricks.remove(brick)
-                score += 10
-                if not mute: brick_break_sound.play()
-                if random.random() < 0.3:
-                    power_ups.append(PowerUp(brick.rect.centerx, brick.rect.centery,
-                                             random.choice(['grow', 'laser', 'glue', 'slow'])))
-                break
+        for ball in balls:
+            for brick in bricks[:]:
+                if ball.rect.colliderect(brick.rect):
+                    ball.speed_y *= -1
+                    for _ in range(15):
+                        particles.append(Particle(brick.rect.centerx, brick.rect.centery, brick.color, 1, 4, 1, 4, 0.05))
+                    bricks.remove(brick)
+                    score += 10
+                    if not mute: brick_break_sound.play()
+                    if random.random() < 0.3:
+                        power_ups.append(PowerUp(brick.rect.centerx, brick.rect.centery,
+                                                 random.choice(['grow', 'laser', 'glue', 'slow', 'multi', 'life', 'shrink'])))
+                    break
 
         for power_up in power_ups[:]:
             power_up.update()
@@ -268,7 +285,21 @@ while True:
                 if power_up.type in ['grow', 'laser', 'glue']:
                     paddle.activate_power_up(power_up.type)
                 elif power_up.type == 'slow':
-                    ball.activate_power_up(power_up.type)
+                    for ball in balls:
+                        ball.activate_power_up(power_up.type)
+                elif power_up.type == 'multi':
+                    new_balls = []
+                    for ball in balls:
+                        new_ball = Ball(screen_width, screen_height)
+                        new_ball.rect.center = ball.rect.center
+                        new_ball.speed_x = -ball.speed_x
+                        new_ball.speed_y = ball.speed_y
+                        new_balls.append(new_ball)
+                    balls.extend(new_balls)
+                elif power_up.type == 'life':
+                    lives += 1
+                elif power_up.type == 'shrink':
+                    paddle.shrink()
                 power_ups.remove(power_up)
 
         for laser in lasers[:]:
@@ -290,7 +321,8 @@ while True:
             game_state = 'you_win'
 
         paddle.draw(screen)
-        ball.draw(screen)
+        for ball in balls:
+            ball.draw(screen)
         for brick in bricks:
             brick.draw(screen)
         for power_up in power_ups:

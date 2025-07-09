@@ -11,9 +11,8 @@ class Paddle:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.original_width = 100
-        self.height = 10
+        self.height = 20
         self.speed = 7
-        self.color = (200, 200, 200)
 
         self.width = self.original_width
         self.power_up_timers = {
@@ -24,6 +23,8 @@ class Paddle:
         self.has_laser = False
         self.has_glue = False
 
+        self.laser_cooldown = 0
+
         self.rect = pygame.Rect(
             self.screen_width // 2 - self.width // 2,
             self.screen_height - 30,
@@ -31,14 +32,19 @@ class Paddle:
             self.height
         )
 
+        self.original_image = pygame.image.load("./assets/paddle.png").convert_alpha()
+        self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
+
     def reset(self):
-        self.rect.x = self.screen_width // 2 - self.original_width // 2
+        self.rect.x = int(self.screen_width // 2 - self.original_width // 2)
         self.width = self.original_width
         self.rect.width = self.width
         self.has_laser = False
         self.has_glue = False
+        self.laser_cooldown = 0
         for power_up in self.power_up_timers:
             self.power_up_timers[power_up] = 0
+        self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -52,10 +58,13 @@ class Paddle:
         if self.rect.right > self.screen_width:
             self.rect.right = self.screen_width
 
+        if self.laser_cooldown > 0:
+            self.laser_cooldown -= 1
+
         self._update_power_ups()
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+        screen.blit(self.image, self.rect.topleft)
 
     def activate_power_up(self, type):
         duration = 600
@@ -65,6 +74,7 @@ class Paddle:
                 self.width = 150
                 self.rect.width = self.width
                 self.rect.centerx = current_center
+                self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
             self.power_up_timers['grow'] = duration
         elif type == 'laser':
             self.has_laser = True
@@ -78,6 +88,7 @@ class Paddle:
         self.width = max(self.original_width // 2, 40)
         self.rect.width = self.width
         self.rect.centerx = current_center
+        self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
 
     def _update_power_ups(self):
         if self.power_up_timers['grow'] > 0:
@@ -87,6 +98,7 @@ class Paddle:
                 self.width = self.original_width
                 self.rect.width = self.width
                 self.rect.centerx = current_center
+                self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
         if self.power_up_timers['laser'] > 0:
             self.power_up_timers['laser'] -= 1
             if self.power_up_timers['laser'] <= 0:
@@ -139,8 +151,8 @@ class Ball:
                 self.speed_y = self.speed_y * 2
                 self.is_slowed = False
 
-        self.rect.x += self.speed_x
-        self.rect.y += self.speed_y
+        self.rect.x = int(self.rect.x + self.speed_x)
+        self.rect.y = int(self.rect.y + self.speed_y)
 
         if self.rect.top <= 0:
             self.speed_y *= -1
