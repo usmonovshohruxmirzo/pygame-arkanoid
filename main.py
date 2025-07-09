@@ -107,7 +107,7 @@ display_message, message_timer, firework_timer = "", 0, 0
 
 level_images = []
 for i in range(10):
-    img = pygame.image.load(f"./levels/level_1.png").convert_alpha()
+    img = pygame.image.load(f"./levels/level_{i+1}.png").convert_alpha()
     img = pygame.transform.scale(img, (100, 60))
     level_images.append(img)
 
