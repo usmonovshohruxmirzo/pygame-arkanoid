@@ -32,7 +32,7 @@ class Paddle:
             self.height
         )
 
-        self.original_image = pygame.image.load("./assets/images/graphics/paddle.png").convert_alpha()
+        self.original_image = pygame.image.load("../assets/images/graphics/paddle.png").convert_alpha()
         self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
 
     def reset(self):
