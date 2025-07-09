@@ -147,6 +147,15 @@ while True:
             elif game_state in ['game_over', 'you_win']:
                 if event.key == pygame.K_SPACE:
                     game_state = 'title_screen'
+                if game_state == 'you_win' and current_level < len(levels) - 1 and event.key == pygame.K_RETURN:
+                    current_level += 1
+                    chosen_level = current_level
+                    bricks = levels[current_level]()
+                    paddle.reset()
+                    balls = [Ball(screen_width, screen_height)]
+                    score, lives = 0, 3
+                    power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
+                    game_state = 'playing'
 
             elif game_state == 'playing':
                 if event.key == pygame.K_f and paddle.has_laser and paddle.laser_cooldown <= 0:
@@ -394,6 +403,11 @@ while True:
         restart_surface = game_font.render("Press SPACE to return to Title", True, (255, 255, 255))
         restart_rect = restart_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 30))
         screen.blit(restart_surface, restart_rect)
+
+        if game_state == 'you_win' and current_level < len(levels) - 1:
+            next_level_surface = game_font.render("Press ENTER to play next level", True, (255, 255, 255))
+            next_level_rect = next_level_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 80))
+            screen.blit(next_level_surface, next_level_rect)
 
 
     if message_timer > 0:
