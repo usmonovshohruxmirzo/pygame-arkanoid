@@ -111,6 +111,8 @@ for i in range(10):
     img = pygame.transform.scale(img, (100, 60))
     level_images.append(img)
 
+button_img = pygame.image.load("./assets/button.png").convert_alpha()
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -165,34 +167,30 @@ while True:
         screen.blit(cover_image, (0, 0))
         
         start_text = "Press SPACE to Start"
-        start_surface = game_font.render(start_text, True, (0, 0, 0))
-        start_rect = start_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 20))
-        
-        button_padding = 30
+        start_surface = game_font.render(start_text, True, (0, 255, 255))
+        start_rect = start_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 30))
+        button_padding = 120
         button_rect = pygame.Rect(
             start_rect.left - button_padding // 2,
             start_rect.top - button_padding // 2,
             start_rect.width + button_padding,
             start_rect.height + button_padding
         )
-        pygame.draw.rect(screen, (255, 255, 255), button_rect, border_radius=12)
-        pygame.draw.rect(screen, (0, 0, 0), button_rect, 3, border_radius=12)
-        
+        button_img_scaled = pygame.transform.scale(button_img, (button_rect.width, button_rect.height))
+        screen.blit(button_img_scaled, button_rect.topleft)
         screen.blit(start_surface, start_rect)
 
         mute_text = "Press M to Mute/Unmute in-game"
-        mute_surface = message_font.render(mute_text, True, (0, 0, 0))
-        mute_rect = mute_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 90))
-
+        mute_surface = message_font.render(mute_text, True, (0, 255, 255))
+        mute_rect = mute_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 120))
         mute_button_rect = pygame.Rect(
             mute_rect.left - button_padding // 2,
             mute_rect.top - button_padding // 2,
             mute_rect.width + button_padding,
             mute_rect.height + button_padding
         )
-        pygame.draw.rect(screen, (255, 255, 255), mute_button_rect, border_radius=12)
-        pygame.draw.rect(screen, (0, 0, 0), mute_button_rect, 3, border_radius=12)
-
+        mute_img_scaled = pygame.transform.scale(button_img, (mute_button_rect.width, mute_button_rect.height))
+        screen.blit(mute_img_scaled, mute_button_rect.topleft)
         screen.blit(mute_surface, mute_rect)
 
 
@@ -200,11 +198,15 @@ while True:
         select_surface = title_font.render("Select Level", True, (255, 255, 255))
         select_rect = select_surface.get_rect(center=(screen_width / 2, 60))
         screen.blit(select_surface, select_rect)
+        instruction_text = "(Click a level to select)"
+        instruction_surface = message_font.render(instruction_text, True, (255, 255, 255))
+        instruction_rect = instruction_surface.get_rect(center=(screen_width / 2, 100))
+        screen.blit(instruction_surface, instruction_rect)
 
         num_levels = 10
         cols = 5
         rows = 2
-        box_width = 120
+        box_width = 130
         box_height = 100
         padding_x = 40
         padding_y = 40
@@ -248,7 +250,6 @@ while True:
                     break
 
     elif game_state == 'playing':
-        # Draw border images
         left_y = (screen_height - edge_left_img.get_height()) // 2
         right_y = (screen_height - edge_right_img.get_height()) // 2
         screen.blit(edge_left_img, (0, left_y))
@@ -364,7 +365,7 @@ while True:
             muted_text = message_font.render("MUTED", True, (255, 0, 0))
             screen.blit(
                 muted_text,
-                (screen_width - muted_text.get_width() - 10, screen_height - muted_text.get_height() - 10)
+                (screen_width - muted_text.get_width() - 30, screen_height - muted_text.get_height() - 10)
             )
 
     elif game_state in ['game_over', 'you_win']:
