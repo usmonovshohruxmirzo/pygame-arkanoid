@@ -65,34 +65,34 @@ right_offset = edge_right_img.get_width()
 top_offset = edge_top_img.get_height()
 
 def pattern_1():
-    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10)]
 
 def pattern_2():
-    return [Brick(left_offset + (screen_width - left_offset - right_offset) // 2 - (row * 40) + col * 80, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
+    return [Brick(left_offset + (screen_width - left_offset - right_offset) // 2 - (row * 40) + col * 80, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
 def pattern_3():
-    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row + col) % 2 == 0]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row + col) % 2 == 0]
 
 def pattern_4():
-    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if row in [0, 5] or col in [0, 9]]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if row in [0, 5] or col in [0, 9]]
 
 def pattern_5():
-    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
 def pattern_6():
-    return [Brick(left_offset + col * 80 + row * 40 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10 - row)]
+    return [Brick(left_offset + col * 80 + row * 40 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10 - row)]
 
 def pattern_7():
-    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row % 2 == 0 and col % 3 != 1) or (row % 2 == 1 and col % 3 == 1)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row % 2 == 0 and col % 3 != 1) or (row % 2 == 1 and col % 3 == 1)]
 
 def pattern_8():
-    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if col % 2 == 0]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if col % 2 == 0]
 
 def pattern_9():
-    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 10, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) if row % 2 == 0 for col in range(10)]
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) if row % 2 == 0 for col in range(10)]
 
 def pattern_10():
-    return [Brick(left_offset + random.randint(0, 9) * 80 + 5, top_offset + random.randint(0, 5) * 25 + 10, 75, 20, random.choice(BRICK_COLORS)) for _ in range(30)]
+    return [Brick(left_offset + random.randint(0, 9) * 80 + 5, top_offset + random.randint(0, 5) * 25 + 40, 75, 20, random.choice(BRICK_COLORS)) for _ in range(30)]
 
 levels = [pattern_1, pattern_2, pattern_3, pattern_4, pattern_5,
           pattern_6, pattern_7, pattern_8, pattern_9, pattern_10]
@@ -354,11 +354,11 @@ while True:
             laser.draw(screen)
 
         score_text = game_font.render(f"Score: {score}", True, (255, 255, 255))
-        screen.blit(score_text, (10, 10))
+        screen.blit(score_text, (25, 20))
         lives_text = game_font.render(f"Lives: {lives}", True, (255, 255, 255))
-        screen.blit(lives_text, (screen_width - lives_text.get_width() - 10, 10))
+        screen.blit(lives_text, (screen_width - lives_text.get_width() - 25, 20))
         level_text = game_font.render(f"Level: {current_level + 1}", True, (255, 255, 255))
-        screen.blit(level_text, (screen_width // 2 - 50, 10))
+        screen.blit(level_text, (screen_width // 2 - 50, 20))
 
         if mute:
             muted_text = message_font.render("MUTED", True, (255, 0, 0))
