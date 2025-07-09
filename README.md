@@ -2,6 +2,8 @@
 
 A modern, feature-rich Arkanoid/Breakout clone built with Python and PyGame.
 
+![image](https://github.com/user-attachments/assets/667e4922-41ea-4de2-b0a6-046aa98fed57)
+
 ## Features
 - **Title Screen** with start button and mute instructions
 - **Mute Button**: Press `M` during gameplay to mute/unmute sounds
