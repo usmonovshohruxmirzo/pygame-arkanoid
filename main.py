@@ -64,38 +64,38 @@ left_offset = edge_left_img.get_width()
 right_offset = edge_right_img.get_width()
 top_offset = edge_top_img.get_height()
 
-def pattern_1():
+def level_1():
     return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10)]
 
-def pattern_2():
+def level_2():
     return [Brick(left_offset + (screen_width - left_offset - right_offset) // 2 - (row * 40) + col * 80, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
-def pattern_3():
+def level_3():
     return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row + col) % 2 == 0]
 
-def pattern_4():
+def level_4():
     return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if row in [0, 5] or col in [0, 9]]
 
-def pattern_5():
+def level_5():
     return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(row + 1)]
 
-def pattern_6():
+def level_6():
     return [Brick(left_offset + col * 80 + row * 40 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10 - row)]
 
-def pattern_7():
+def level_7():
     return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if (row % 2 == 0 and col % 3 != 1) or (row % 2 == 1 and col % 3 == 1)]
 
-def pattern_8():
+def level_8():
     return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) for col in range(10) if col % 2 == 0]
 
-def pattern_9():
+def level_9():
     return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4]) for row in range(6) if row % 2 == 0 for col in range(10)]
 
-def pattern_10():
+def level_10():
     return [Brick(left_offset + random.randint(0, 9) * 80 + 5, top_offset + random.randint(0, 5) * 25 + 40, 75, 20, random.choice(BRICK_COLORS)) for _ in range(30)]
 
-levels = [pattern_1, pattern_2, pattern_3, pattern_4, pattern_5,
-          pattern_6, pattern_7, pattern_8, pattern_9, pattern_10]
+levels = [level_1, level_2, level_3, level_4, level_5,
+          level_6, level_7, level_8, level_9, level_10]
 
 current_level, chosen_level = 0, 0
 bricks = []
