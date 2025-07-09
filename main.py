@@ -51,13 +51,13 @@ win_sound = load_sound('./assets/sounds/win.mp3')
 paddle = Paddle(screen_width, screen_height)
 balls = [Ball(screen_width, screen_height)]
 
-edge_left_img = pygame.image.load("./assets/game/edge_left.png").convert_alpha()
-edge_right_img = pygame.image.load("./assets/game/edge_right.png").convert_alpha()
+edge_left_img = pygame.image.load("./assets/images/graphics/edge_left.png").convert_alpha()
+edge_right_img = pygame.image.load("./assets/images/graphics/edge_right.png").convert_alpha()
 left_new_height = int(edge_left_img.get_height() * 0.924)
 right_new_height = int(edge_right_img.get_height() * 0.924)
 edge_left_img = pygame.transform.scale(edge_left_img, (edge_left_img.get_width(), left_new_height))
 edge_right_img = pygame.transform.scale(edge_right_img, (edge_right_img.get_width(), right_new_height))
-edge_top_img = pygame.image.load("./assets/game/edge_top.png").convert_alpha()
+edge_top_img = pygame.image.load("./assets/images/graphics/edge_top.png").convert_alpha()
 edge_top_img = pygame.transform.scale(edge_top_img, (screen_width, edge_top_img.get_height()))
 
 left_offset = edge_left_img.get_width()
