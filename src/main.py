@@ -104,6 +104,7 @@ power_ups, lasers, particles, fireworks = [], [], [], []
 game_state = 'title_screen'
 score, lives = 0, 3
 display_message, message_timer, firework_timer = "", 0, 0
+paused = False
 
 level_images = []
 for i in range(10):
@@ -169,6 +170,10 @@ while True:
                     for ball in balls:
                         if ball.is_glued:
                             ball.is_glued = False
+                if event.key == pygame.K_p:
+                    paused = not paused
+                if paused:
+                    continue
 
     screen.fill(BG_COLOR)
 
@@ -259,6 +264,13 @@ while True:
                     break
 
     elif game_state == 'playing':
+        if paused:
+            pause_surface = title_font.render("PAUSED", True, (255, 255, 255))
+            pause_rect = pause_surface.get_rect(center=(screen_width // 2, screen_height // 2))
+            screen.blit(pause_surface, pause_rect)
+            pygame.display.flip()
+            clock.tick(60)
+            continue
         left_y = (screen_height - edge_left_img.get_height()) // 2
         right_y = (screen_height - edge_right_img.get_height()) // 2
         screen.blit(edge_left_img, (0, left_y))
