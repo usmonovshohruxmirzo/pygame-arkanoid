@@ -5,6 +5,11 @@ import math
 pygame.font.init()
 POWERUP_FONT = pygame.font.Font(None, 20)
 
+def get_average_color(surface):
+    arr = pygame.surfarray.array3d(surface)
+    avg_color = arr.mean(axis=(0, 1)).astype(int)
+    return tuple(avg_color)
+
 
 class Paddle:
     def __init__(self, screen_width, screen_height):
@@ -184,12 +189,25 @@ class Ball:
 
 
 class Brick:
-    def __init__(self, x, y, width, height, color):
+    def __init__(self, x, y, width, height, color, texture=None):
         self.rect = pygame.Rect(x, y, width, height)
-        self.color = color
+        self.texture = None
+        if texture is not None:
+            try:
+                img = pygame.image.load(texture).convert_alpha()
+                self.texture = pygame.transform.scale(img, (width, height))
+                self.color = get_average_color(self.texture)
+            except Exception:
+                self.texture = None
+                self.color = color
+        else:
+            self.color = color
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+        if self.texture:
+            screen.blit(self.texture, self.rect)
+        else:
+            pygame.draw.rect(screen, self.color, self.rect)
 
 
 class PowerUp:
