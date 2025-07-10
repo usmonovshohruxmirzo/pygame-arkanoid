@@ -1,6 +1,6 @@
 # PyGame Arkanoid
 
-University internship project: "Python-powered Game Development" — an interactive, feature-rich game built using Python and PyGame, showcasing modern graphics, smooth gameplay mechanics, and advanced game design concepts.
+University internship project: `Python-powered Game Development` — an interactive, feature-rich game built using Python and PyGame, showcasing modern graphics, smooth gameplay mechanics, and advanced game design concepts.
 
 <img width="1056" height="743" alt="image" src="https://github.com/user-attachments/assets/18806495-4f7f-49b2-87e7-76d55fa7c142" />
 <img width="1055" height="743" alt="image" src="https://github.com/user-attachments/assets/bd00bd38-178e-49c4-b934-f139d5c2e41e" />
