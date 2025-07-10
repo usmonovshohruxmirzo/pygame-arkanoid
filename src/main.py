@@ -121,8 +121,6 @@ for i in range(10):
     img = pygame.transform.scale(img, (100, 60))
     level_images.append(img)
 
-button_img = pygame.image.load("../assets/images/graphics/button.png").convert_alpha()
-
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
