@@ -98,8 +98,25 @@ def level_9():
 def level_10():
     return [Brick(left_offset + random.randint(0, 9) * 80 + 5, top_offset + random.randint(0, 5) * 25 + 40, 75, 20, random.choice(BRICK_COLORS), brick_texture_map[random.choice(BRICK_COLORS)]) for _ in range(30)]
 
+def level_11():
+    return [Brick(left_offset + (col * 80 + (row % 2) * 40) + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[(row + col) % 4], brick_texture_map[BRICK_COLORS[(row + col) % 4]]) for row in range(6) for col in range(8)]
+
+def level_12():
+    return [Brick(left_offset + (4 - abs(2.5 - row)) * 40 + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[(row * col) % 4], brick_texture_map[BRICK_COLORS[(row * col) % 4]]) for row in range(6) for col in range(6 - abs(3 - row))]
+
+def level_13():
+    return [Brick(left_offset + col * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[(row * col) % 4], brick_texture_map[BRICK_COLORS[(row * col) % 4]]) for row in range(6) for col in range(10) if col >= row and col <= 9 - row or col <= row and col >= 9 - row]
+
+def level_14():
+    return [Brick(left_offset + 2 * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[row % 4], brick_texture_map[BRICK_COLORS[row % 4]]) for row in range(6)] + \
+           [Brick(left_offset + 7 * 80 + 5, top_offset + row * 25 + 40, 75, 20, BRICK_COLORS[(row + 2) % 4], brick_texture_map[BRICK_COLORS[(row + 2) % 4]]) for row in range(6)]
+
+def level_15():
+    return [Brick(left_offset + random.randint(0, 9) * 80 + 5, top_offset + random.randint(0, 5) * 25 + 40, 75, 20, random.choice(BRICK_COLORS), brick_texture_map[random.choice(BRICK_COLORS)]) for _ in range(25)]
+
 levels = [level_1, level_2, level_3, level_4, level_5,
-          level_6, level_7, level_8, level_9, level_10]
+          level_6, level_7, level_8, level_9, level_10,
+          level_11, level_12, level_13, level_14, level_15]
 
 current_level, chosen_level = 0, 0
 bricks = []
@@ -111,8 +128,13 @@ display_message, message_timer, firework_timer = "", 0, 0
 paused = False
 
 level_images = []
-for i in range(10):
-    img = pygame.image.load(f"../assets/images/levels/level_{i+1}.png").convert_alpha()
+for i in range(15):
+    try:
+        img = pygame.image.load(f"../assets/images/levels/level_{i+1}.png").convert_alpha()
+    except Exception:
+        # Use a blank or fallback image if not found
+        img = pygame.Surface((100, 60), pygame.SRCALPHA)
+        img.fill((40, 40, 40, 255))
     img = pygame.transform.scale(img, (100, 60))
     level_images.append(img)
 
@@ -211,9 +233,9 @@ while True:
         instruction_rect = instruction_surface.get_rect(center=(screen_width / 2, 100))
         screen.blit(instruction_surface, instruction_rect)
 
-        num_levels = 10
+        num_levels = 15
         cols = 5
-        rows = 2
+        rows = 3
         box_width = 130
         box_height = 100
         padding_x = 40
