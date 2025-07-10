@@ -397,21 +397,19 @@ while True:
             for firework in fireworks:
                 firework.draw(screen)
         
-        if game_state == 'game_over':
-            message = "GAME OVER"
-            big_font = pygame.font.Font(None, 100)
-            text_surface = big_font.render(message, True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2))
-            screen.blit(text_surface, text_rect)
-        else:
-            message = "YOU WIN!"
-            big_font = pygame.font.Font(None, 100)
-            text_surface = big_font.render(message, True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2))
-            screen.blit(text_surface, text_rect)
+        if game_state in ['game_over', 'you_win']:
+            # Show score at the top center
             score_surface = game_font.render(f"Score: {score}", True, (255, 255, 255))
-            score_rect = score_surface.get_rect(center=(screen_width / 2, text_rect.bottom + score_surface.get_height() // 2 + 40))
+            score_rect = score_surface.get_rect(center=(screen_width / 2, 80))
             screen.blit(score_surface, score_rect)
+            if game_state == 'game_over':
+                message = "GAME OVER"
+            else:
+                message = "YOU WIN!"
+            big_font = pygame.font.Font(None, 100)
+            text_surface = big_font.render(message, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2))
+            screen.blit(text_surface, text_rect)
 
         restart_surface = game_font.render("Press SPACE to return to Title", True, (255, 255, 255))
         restart_rect = restart_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 100))
