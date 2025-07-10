@@ -40,6 +40,8 @@ def load_sound(file):
         class DummySound:
             def play(self):
                 pass
+            def stop(self):
+                pass
         return DummySound()
 
 bounce_sound = load_sound('../assets/sounds/bounce.wav')
@@ -155,13 +157,15 @@ while True:
             elif game_state in ['game_over', 'you_win']:
                 if event.key == pygame.K_SPACE:
                     game_state = 'title_screen'
+                    score, lives = 0, 3
+
                 if game_state == 'you_win' and current_level < len(levels) - 1 and event.key == pygame.K_RETURN:
                     current_level += 1
                     chosen_level = current_level
                     bricks = levels[current_level]()
                     paddle.reset()
                     balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
-                    score, lives = 0, 3
+                    lives = 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
 
@@ -370,7 +374,9 @@ while True:
 
         if not bricks:
             game_state = 'you_win'
-            if not mute: win_sound.play()
+            if not mute:
+                win_sound.stop()
+                win_sound.play()
 
         paddle.draw(screen)
         for ball in balls:

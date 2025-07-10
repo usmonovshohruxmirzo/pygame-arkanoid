@@ -37,8 +37,9 @@ class Paddle:
             self.height
         )
 
-        self.original_image = pygame.image.load("../assets/images/graphics/paddle.png").convert_alpha()
-        self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
+        self.normal_image = pygame.image.load("../assets/images/graphics/paddle.png").convert_alpha()
+        self.laser_image = pygame.image.load("../assets/images/graphics/paddle_laser.png").convert_alpha()
+        self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
 
     def reset(self):
         self.rect.x = int(self.screen_width // 2 - self.original_width // 2)
@@ -49,7 +50,7 @@ class Paddle:
         self.laser_cooldown = 0
         for power_up in self.power_up_timers:
             self.power_up_timers[power_up] = 0
-        self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
+        self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -68,6 +69,11 @@ class Paddle:
 
         self._update_power_ups()
 
+        if self.has_laser:
+            self.image = pygame.transform.scale(self.laser_image, (self.width, self.height))
+        else:
+            self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
+
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
 
@@ -79,7 +85,10 @@ class Paddle:
                 self.width = 150
                 self.rect.width = self.width
                 self.rect.centerx = current_center
-                self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
+                if self.has_laser:
+                    self.image = pygame.transform.scale(self.laser_image, (self.width, self.height))
+                else:
+                    self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
             self.power_up_timers['grow'] = duration
         elif type == 'laser':
             self.has_laser = True
@@ -93,7 +102,10 @@ class Paddle:
         self.width = max(self.original_width // 2, 40)
         self.rect.width = self.width
         self.rect.centerx = current_center
-        self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
+        if self.has_laser:
+            self.image = pygame.transform.scale(self.laser_image, (self.width, self.height))
+        else:
+            self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
 
     def _update_power_ups(self):
         if self.power_up_timers['grow'] > 0:
@@ -103,7 +115,10 @@ class Paddle:
                 self.width = self.original_width
                 self.rect.width = self.width
                 self.rect.centerx = current_center
-                self.image = pygame.transform.scale(self.original_image, (self.width, self.height))
+                if self.has_laser:
+                    self.image = pygame.transform.scale(self.laser_image, (self.width, self.height))
+                else:
+                    self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
         if self.power_up_timers['laser'] > 0:
             self.power_up_timers['laser'] -= 1
             if self.power_up_timers['laser'] <= 0:
