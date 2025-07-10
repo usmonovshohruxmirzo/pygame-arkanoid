@@ -2,7 +2,10 @@
 
 A modern, feature-rich Arkanoid/Breakout clone built with Python and PyGame.
 
+<img width="1056" height="743" alt="image" src="https://github.com/user-attachments/assets/18806495-4f7f-49b2-87e7-76d55fa7c142" />
+<img width="1055" height="743" alt="image" src="https://github.com/user-attachments/assets/bd00bd38-178e-49c4-b934-f139d5c2e41e" />
 <img width="1205" height="851" alt="image" src="https://github.com/user-attachments/assets/47c5bf7e-fdb2-4517-9abd-11a773db336f" />
+
 
 ## Features
 - **Title Screen** with start button and mute instructions
