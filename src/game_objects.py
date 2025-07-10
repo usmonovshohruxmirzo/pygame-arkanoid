@@ -30,6 +30,9 @@ class Paddle:
 
         self.laser_cooldown = 0
 
+        self.left_offset = 0
+        self.right_offset = 0
+
         self.rect = pygame.Rect(
             self.screen_width // 2 - self.width // 2,
             self.screen_height - 30,
@@ -59,10 +62,7 @@ class Paddle:
         if keys[pygame.K_RIGHT]:
             self.rect.x += self.speed
 
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.right > self.screen_width:
-            self.rect.right = self.screen_width
+        self.clamp_to_screen()
 
         if self.laser_cooldown > 0:
             self.laser_cooldown -= 1
@@ -77,6 +77,12 @@ class Paddle:
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
 
+    def clamp_to_screen(self):
+        if self.rect.left < self.left_offset:
+            self.rect.left = self.left_offset
+        if self.rect.right > self.screen_width - self.right_offset:
+            self.rect.right = self.screen_width - self.right_offset
+
     def activate_power_up(self, type):
         duration = 600
         if type == 'grow':
@@ -90,6 +96,7 @@ class Paddle:
                 else:
                     self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
             self.power_up_timers['grow'] = duration
+            self.clamp_to_screen()
         elif type == 'laser':
             self.has_laser = True
             self.power_up_timers['laser'] = duration
@@ -106,6 +113,7 @@ class Paddle:
             self.image = pygame.transform.scale(self.laser_image, (self.width, self.height))
         else:
             self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
+        self.clamp_to_screen()
 
     def _update_power_ups(self):
         if self.power_up_timers['grow'] > 0:
@@ -119,6 +127,7 @@ class Paddle:
                     self.image = pygame.transform.scale(self.laser_image, (self.width, self.height))
                 else:
                     self.image = pygame.transform.scale(self.normal_image, (self.width, self.height))
+                self.clamp_to_screen()
         if self.power_up_timers['laser'] > 0:
             self.power_up_timers['laser'] -= 1
             if self.power_up_timers['laser'] <= 0:

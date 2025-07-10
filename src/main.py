@@ -58,7 +58,9 @@ left_offset = edge_left_img.get_width()
 right_offset = edge_right_img.get_width()
 top_offset = edge_top_img.get_height()
 
-paddle = Paddle(screen_width, screen_height, left_offset, right_offset)
+paddle = Paddle(screen_width, screen_height)
+paddle.left_offset = left_offset
+paddle.right_offset = right_offset
 balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
 
 brick_texture_map = {
