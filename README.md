@@ -7,7 +7,7 @@ A modern, feature-rich Arkanoid/Breakout clone built with Python and PyGame.
 ## Features
 - **Title Screen** with start button and mute instructions
 - **Mute Button**: Press `M` during gameplay to mute/unmute sounds
-- **10 Unique Levels**: Selectable via keyboard or mouse, each with a preview image
+- **15 Unique Levels**: Selectable via keyboard or mouse, each with a preview image
 - **Game Over & Win Screens**: Custom backgrounds, restart instructions, and fireworks on win
 - **Multiple Power-ups**: Includes Grow Paddle, Laser, Glue, Slow Ball, Multi-ball, Extra Life, and Shrink Paddle
 - **Particle Effects**: For brick breaking, paddle/ball collisions, and fireworks
