@@ -192,30 +192,17 @@ while True:
         screen.blit(cover_image, (0, 0))
         
         start_text = "Press SPACE to Start"
-        start_surface = game_font.render(start_text, True, (0, 255, 255))
-        start_rect = start_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 30))
-        button_padding = 120
-        button_rect = pygame.Rect(
-            start_rect.left - button_padding // 2,
-            start_rect.top - button_padding // 2,
-            start_rect.width + button_padding,
-            start_rect.height + button_padding
-        )
-        button_img_scaled = pygame.transform.scale(button_img, (button_rect.width, button_rect.height))
-        screen.blit(button_img_scaled, button_rect.topleft)
-        screen.blit(start_surface, start_rect)
-
+        start_surface = game_font.render(start_text, True, (255, 255, 255))
         mute_text = "Press M to Mute/Unmute in-game"
-        mute_surface = message_font.render(mute_text, True, (0, 255, 255))
-        mute_rect = mute_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 120))
-        mute_button_rect = pygame.Rect(
-            mute_rect.left - button_padding // 2,
-            mute_rect.top - button_padding // 2,
-            mute_rect.width + button_padding,
-            mute_rect.height + button_padding
-        )
-        mute_img_scaled = pygame.transform.scale(button_img, (mute_button_rect.width, mute_button_rect.height))
-        screen.blit(mute_img_scaled, mute_button_rect.topleft)
+        mute_surface = message_font.render(mute_text, True, (255, 255, 255))
+        button_gap = 20
+        start_rect = start_surface.get_rect()
+        mute_rect = mute_surface.get_rect()
+        base_x = 40
+        base_y = screen_height - (start_rect.height + mute_rect.height + button_gap) - 40
+        start_rect.topleft = (base_x, base_y)
+        screen.blit(start_surface, start_rect)
+        mute_rect.topleft = (base_x, base_y + start_rect.height + button_gap)
         screen.blit(mute_surface, mute_rect)
 
 
