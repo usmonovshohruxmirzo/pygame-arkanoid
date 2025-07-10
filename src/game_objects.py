@@ -146,7 +146,7 @@ class Ball:
         self.right_offset = right_offset
         self.top_offset = top_offset
         self.radius = 10
-        self.color = (200, 200, 200)
+        self.color = (0, 255, 255)
         self.rect = pygame.Rect(0, 0, self.radius * 2, self.radius * 2)
 
         self.is_glued = False
