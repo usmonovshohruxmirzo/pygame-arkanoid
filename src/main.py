@@ -185,15 +185,18 @@ while True:
         screen.blit(cover_image, (0, 0))
         
         start_text = "Press SPACE to Start"
-        start_surface = game_font.render(start_text, True, (255, 255, 255))
+        big_title_font = pygame.font.Font(None, 60)
+        big_message_font = pygame.font.Font(None, 38)
+        start_surface = big_title_font.render(start_text, True, (255, 255, 255))
         button_gap = 20
         start_rect = start_surface.get_rect()
         base_x = 40
         base_y = screen_height - (start_rect.height + button_gap) - 40
         start_rect.topleft = (base_x, base_y)
         screen.blit(start_surface, start_rect)
+
         mute_instruction_text = "Press M to Mute/Unmute in-game"
-        mute_instruction_surface = message_font.render(mute_instruction_text, True, (255, 255, 255))
+        mute_instruction_surface = big_message_font.render(mute_instruction_text, True, (255, 255, 255))
         mute_instruction_rect = mute_instruction_surface.get_rect()
         mute_instruction_rect.topleft = (base_x, base_y + start_rect.height + 10)
         screen.blit(mute_instruction_surface, mute_instruction_rect)
