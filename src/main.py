@@ -17,12 +17,6 @@ cover_image = pygame.transform.scale(cover_image, (screen_width, screen_height))
 game_bg_image = pygame.image.load("../assets/images/graphics/field.png").convert()
 game_bg_image = pygame.transform.scale(game_bg_image, (screen_width, screen_height))
 
-game_over_bg_image = pygame.image.load("../assets/images/graphics/gameover.png").convert()
-game_over_bg_image = pygame.transform.scale(game_over_bg_image, (screen_width, screen_height))
-
-you_win_bg_image = pygame.image.load("../assets/images/graphics/win.png").convert()
-you_win_bg_image = pygame.transform.scale(you_win_bg_image, (screen_width, screen_height))
-
 paddle_image = pygame.image.load("../assets/images/graphics/paddle.png").convert_alpha()
 
 BG_COLOR = pygame.Color('grey12')
@@ -389,9 +383,7 @@ while True:
 
     elif game_state in ['game_over', 'you_win']:
         if game_state == 'game_over':
-            screen.blit(game_over_bg_image, (0, 0))
-        else:
-            screen.blit(you_win_bg_image, (0, 0))
+            pass
         
         if game_state == 'you_win':
             firework_timer -= 1
@@ -405,18 +397,29 @@ while True:
             for firework in fireworks:
                 firework.draw(screen)
         
-        message = "GAME OVER" if game_state == 'game_over' else "YOU WIN!"
-        text_surface = game_font.render(message, True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2 - 20))
-        screen.blit(text_surface, text_rect)
+        if game_state == 'game_over':
+            message = "GAME OVER"
+            big_font = pygame.font.Font(None, 100)
+            text_surface = big_font.render(message, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2))
+            screen.blit(text_surface, text_rect)
+        else:
+            message = "YOU WIN!"
+            big_font = pygame.font.Font(None, 100)
+            text_surface = big_font.render(message, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2))
+            screen.blit(text_surface, text_rect)
+            score_surface = game_font.render(f"Score: {score}", True, (255, 255, 255))
+            score_rect = score_surface.get_rect(center=(screen_width / 2, text_rect.bottom + score_surface.get_height() // 2 + 40))
+            screen.blit(score_surface, score_rect)
 
         restart_surface = game_font.render("Press SPACE to return to Title", True, (255, 255, 255))
-        restart_rect = restart_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 30))
+        restart_rect = restart_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 100))
         screen.blit(restart_surface, restart_rect)
 
         if game_state == 'you_win' and current_level < len(levels) - 1:
             next_level_surface = game_font.render("Press ENTER to play next level", True, (255, 255, 255))
-            next_level_rect = next_level_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 80))
+            next_level_rect = next_level_surface.get_rect(center=(screen_width / 2, screen_height / 2 + 150))
             screen.blit(next_level_surface, next_level_rect)
 
 
