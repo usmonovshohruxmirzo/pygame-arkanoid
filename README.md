@@ -30,6 +30,36 @@ University internship project: "Python-powered Game Development" — an interact
    pip install -r requirements.txt
    ```
 
+## Folder Structure
+
+```
+pygame-arkanoid/
+  assets/
+    images/
+      graphics/         # Game graphics (bricks, paddle, edges, icons, etc.)
+      levels/           # Level preview images (level_1.png ... level_15.png)
+    sounds/             # Game sound effects and music
+  src/
+    __init__.py
+    main.py             # Main game entry point
+    game_objects.py     # Game object classes (Paddle, Ball, Brick, etc.)
+  requirements.txt
+  README.md
+```
+
+- **All images and sounds are in the `assets/` folder.**
+- **All source code is in the `src/` folder.**
+
+## How to Run
+
+1. **Make sure you have installed the requirements above**
+2. **Run the game from the `src/` directory**:
+   ```bash
+   cd src
+   python main.py
+   ```
+   (This ensures asset paths work correctly.)
+
 ## Controls
 
 - **Arrow Keys**: Move paddle left/right
@@ -50,24 +80,17 @@ University internship project: "Python-powered Game Development" — an interact
 - **Life (+)**: Gain an extra life
 - **Shrink (-)**: Paddle shrinks
 
-## How to Run
-
-1. **Make sure you have installed the requirements above**
-2. **Run the game**:
-   ```bash
-   python main.py
-   ```
-
 ## Assets
 
-- All images and sounds are included in the `assets/` and `levels/` folders.
-- Make sure these folders are in the same directory as `main.py`.
+- All images and sounds are included in the `assets/` folder.
+- Make sure the `assets/` folder is in the project root (at the same level as `src/`).
+- Do **not** move the assets folder or the game may not find the images/sounds.
 
 ## Credits
 
 - Developed for Phase 12 Homework
 - Powered by [PyGame](https://www.pygame.org/)
-- Sound and image assets: see `assets/` and `levels/` folders
+- Sound and image assets: see `assets/` folder
 
 ## License
 
