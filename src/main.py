@@ -9,7 +9,7 @@ pygame.mixer.init()
 clock = pygame.time.Clock()
 screen_width, screen_height = 850, 600
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("PyGame Arkanoid")
+pygame.display.set_caption("PyGame Arkanoid | Shokhrukhmirzo Usmonov")
 
 cover_image = pygame.image.load("../assets/images/graphics/start.png").convert_alpha()
 cover_image = pygame.transform.scale(cover_image, (screen_width, screen_height))
