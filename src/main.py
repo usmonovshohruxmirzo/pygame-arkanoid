@@ -192,13 +192,11 @@ while True:
         base_y = screen_height - (start_rect.height + button_gap) - 40
         start_rect.topleft = (base_x, base_y)
         screen.blit(start_surface, start_rect)
-        mute_icon_y = base_y + start_rect.height + button_gap + 10
-        if mute:
-            mute_icon = pygame.image.load("../assets/images/graphics/mute.png").convert_alpha()
-        else:
-            mute_icon = pygame.image.load("../assets/images/graphics/speaker.png").convert_alpha()
-        mute_icon = pygame.transform.scale(mute_icon, (48, 48))
-        screen.blit(mute_icon, (base_x, mute_icon_y))
+        mute_instruction_text = "Press M to Mute/Unmute in-game"
+        mute_instruction_surface = message_font.render(mute_instruction_text, True, (255, 255, 255))
+        mute_instruction_rect = mute_instruction_surface.get_rect()
+        mute_instruction_rect.topleft = (base_x, base_y + start_rect.height + 10)
+        screen.blit(mute_instruction_surface, mute_instruction_rect)
 
 
     elif game_state == 'level_select':
