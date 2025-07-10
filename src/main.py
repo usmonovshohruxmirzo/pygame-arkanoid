@@ -29,13 +29,14 @@ message_font = pygame.font.Font(None, 30)
 mute = False
 def load_sound(file):
     try:
-        return pygame.mixer.Sound(file)
-    except:
+        s = pygame.mixer.Sound(file)
+        print(f"Loaded sound: {file}")
+        return s
+    except Exception as e:
+        print(f"Failed to load sound: {file} ({e})")
         class DummySound:
-            def play(self):
-                pass
-            def stop(self):
-                pass
+            def play(self): pass
+            def stop(self): pass
         return DummySound()
 
 bounce_sound = load_sound('../assets/sounds/bounce.wav')
@@ -57,7 +58,7 @@ left_offset = edge_left_img.get_width()
 right_offset = edge_right_img.get_width()
 top_offset = edge_top_img.get_height()
 
-paddle = Paddle(screen_width, screen_height)
+paddle = Paddle(screen_width, screen_height, left_offset, right_offset)
 balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
 
 brick_texture_map = {
@@ -185,17 +186,19 @@ while True:
         
         start_text = "Press SPACE to Start"
         start_surface = game_font.render(start_text, True, (255, 255, 255))
-        mute_text = "Press M to Mute/Unmute in-game"
-        mute_surface = message_font.render(mute_text, True, (255, 255, 255))
         button_gap = 20
         start_rect = start_surface.get_rect()
-        mute_rect = mute_surface.get_rect()
         base_x = 40
-        base_y = screen_height - (start_rect.height + mute_rect.height + button_gap) - 40
+        base_y = screen_height - (start_rect.height + button_gap) - 40
         start_rect.topleft = (base_x, base_y)
         screen.blit(start_surface, start_rect)
-        mute_rect.topleft = (base_x, base_y + start_rect.height + button_gap)
-        screen.blit(mute_surface, mute_rect)
+        mute_icon_y = base_y + start_rect.height + button_gap + 10
+        if mute:
+            mute_icon = pygame.image.load("../assets/images/graphics/mute.png").convert_alpha()
+        else:
+            mute_icon = pygame.image.load("../assets/images/graphics/speaker.png").convert_alpha()
+        mute_icon = pygame.transform.scale(mute_icon, (48, 48))
+        screen.blit(mute_icon, (base_x, mute_icon_y))
 
 
     elif game_state == 'level_select':
@@ -375,11 +378,11 @@ while True:
         screen.blit(level_text, (screen_width // 2 - 50, 20))
 
         if mute:
-            muted_text = message_font.render("MUTED", True, (255, 0, 0))
-            screen.blit(
-                muted_text,
-                (screen_width - muted_text.get_width() - 30, screen_height - muted_text.get_height() - 10)
-            )
+            mute_icon = pygame.image.load("../assets/images/graphics/mute.png").convert_alpha()
+        else:
+            mute_icon = pygame.image.load("../assets/images/graphics/speaker.png").convert_alpha()
+        mute_icon = pygame.transform.scale(mute_icon, (30, 30))
+        screen.blit(mute_icon, (screen_width - mute_icon.get_width() - 30, screen_height - mute_icon.get_height() - 20))
 
     elif game_state in ['game_over', 'you_win']:
         if game_state == 'game_over':
@@ -398,7 +401,6 @@ while True:
                 firework.draw(screen)
         
         if game_state in ['game_over', 'you_win']:
-            # Show score at the top center
             score_surface = game_font.render(f"Score: {score}", True, (255, 255, 255))
             score_rect = score_surface.get_rect(center=(screen_width / 2, 80))
             screen.blit(score_surface, score_rect)

@@ -12,9 +12,11 @@ def get_average_color(surface):
 
 
 class Paddle:
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, screen_width, screen_height, left_offset=0, right_offset=0):
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.left_offset = left_offset
+        self.right_offset = right_offset
         self.original_width = 100
         self.height = 20
         self.speed = 7
@@ -59,10 +61,10 @@ class Paddle:
         if keys[pygame.K_RIGHT]:
             self.rect.x += self.speed
 
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.right > self.screen_width:
-            self.rect.right = self.screen_width
+        if self.rect.left < self.left_offset:
+            self.rect.left = self.left_offset
+        if self.rect.right > self.screen_width - self.right_offset:
+            self.rect.right = self.screen_width - self.right_offset
 
         if self.laser_cooldown > 0:
             self.laser_cooldown -= 1
