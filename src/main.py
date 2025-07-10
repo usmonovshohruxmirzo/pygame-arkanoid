@@ -20,7 +20,7 @@ game_bg_image = pygame.transform.scale(game_bg_image, (screen_width, screen_heig
 game_over_bg_image = pygame.image.load("../assets/images/graphics/gameover.png").convert()
 game_over_bg_image = pygame.transform.scale(game_over_bg_image, (screen_width, screen_height))
 
-you_win_bg_image = pygame.image.load("../assets/images/graphics/start.png").convert()
+you_win_bg_image = pygame.image.load("../assets/images/graphics/win.png").convert()
 you_win_bg_image = pygame.transform.scale(you_win_bg_image, (screen_width, screen_height))
 
 paddle_image = pygame.image.load("../assets/images/graphics/paddle.png").convert_alpha()
@@ -48,9 +48,6 @@ game_over_sound = load_sound('../assets/sounds/game_over.wav')
 laser_sound = load_sound('../assets/sounds/laser.wav')
 win_sound = load_sound('../assets/sounds/win.mp3')
 
-paddle = Paddle(screen_width, screen_height)
-balls = [Ball(screen_width, screen_height)]
-
 edge_left_img = pygame.image.load("../assets/images/graphics/edge_left.png").convert_alpha()
 edge_right_img = pygame.image.load("../assets/images/graphics/edge_right.png").convert_alpha()
 left_new_height = int(edge_left_img.get_height() * 0.924)
@@ -63,6 +60,9 @@ edge_top_img = pygame.transform.scale(edge_top_img, (screen_width, edge_top_img.
 left_offset = edge_left_img.get_width()
 right_offset = edge_right_img.get_width()
 top_offset = edge_top_img.get_height()
+
+paddle = Paddle(screen_width, screen_height)
+balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
 
 brick_texture_map = {
     (178, 34, 34): "../assets/images/graphics/bricks/brick_red.png",
@@ -138,7 +138,7 @@ while True:
                     current_level = chosen_level
                     bricks = levels[current_level]()
                     paddle.reset()
-                    balls = [Ball(screen_width, screen_height)]
+                    balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
@@ -147,7 +147,7 @@ while True:
                     current_level = chosen_level
                     bricks = levels[current_level]()
                     paddle.reset()
-                    balls = [Ball(screen_width, screen_height)]
+                    balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
@@ -160,7 +160,7 @@ while True:
                     chosen_level = current_level
                     bricks = levels[current_level]()
                     paddle.reset()
-                    balls = [Ball(screen_width, screen_height)]
+                    balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
@@ -264,7 +264,7 @@ while True:
                     current_level = chosen_level
                     bricks = levels[current_level]()
                     paddle.reset()
-                    balls = [Ball(screen_width, screen_height)]
+                    balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
                     score, lives = 0, 3
                     power_ups.clear(); lasers.clear(); particles.clear(); fireworks.clear()
                     game_state = 'playing'
@@ -309,7 +309,7 @@ while True:
                 game_state = 'game_over'
                 if not mute: game_over_sound.play()
             else:
-                balls = [Ball(screen_width, screen_height)]
+                balls = [Ball(screen_width, screen_height, left_offset, right_offset, top_offset)]
                 paddle.reset()
 
         for ball in balls:
@@ -341,7 +341,7 @@ while True:
                 elif power_up.type == 'multi':
                     new_balls = []
                     for ball in balls:
-                        new_ball = Ball(screen_width, screen_height)
+                        new_ball = Ball(screen_width, screen_height, left_offset, right_offset, top_offset)
                         new_ball.rect.center = ball.rect.center
                         new_ball.speed_x = -ball.speed_x
                         new_ball.speed_y = ball.speed_y

@@ -115,9 +115,12 @@ class Paddle:
 
 
 class Ball:
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, screen_width, screen_height, left_offset=0, right_offset=0, top_offset=0):
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.left_offset = left_offset
+        self.right_offset = right_offset
+        self.top_offset = top_offset
         self.radius = 10
         self.color = (200, 200, 200)
         self.rect = pygame.Rect(0, 0, self.radius * 2, self.radius * 2)
@@ -159,10 +162,16 @@ class Ball:
         self.rect.x = int(self.rect.x + self.speed_x)
         self.rect.y = int(self.rect.y + self.speed_y)
 
-        if self.rect.top <= 0:
+        if self.rect.top <= self.top_offset:
+            self.rect.top = self.top_offset
             self.speed_y *= -1
             collision_object = 'wall'
-        if self.rect.left <= 0 or self.rect.right >= self.screen_width:
+        if self.rect.left <= self.left_offset:
+            self.rect.left = self.left_offset
+            self.speed_x *= -1
+            collision_object = 'wall'
+        if self.rect.right >= self.screen_width - self.right_offset:
+            self.rect.right = self.screen_width - self.right_offset
             self.speed_x *= -1
             collision_object = 'wall'
 
