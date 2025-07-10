@@ -134,7 +134,6 @@ for i in range(15):
     try:
         img = pygame.image.load(f"../assets/images/levels/level_{i+1}.png").convert_alpha()
     except Exception:
-        # Use a blank or fallback image if not found
         img = pygame.Surface((100, 60), pygame.SRCALPHA)
         img.fill((40, 40, 40, 255))
     img = pygame.transform.scale(img, (100, 60))
