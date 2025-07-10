@@ -67,7 +67,7 @@ University internship project: "Python-powered Game Development" — an interact
 
 - Developed for Phase 12 Homework
 - Powered by [PyGame](https://www.pygame.org/)
-- Sound and image assets: see `assets/` and `levels/` folders
+- Sound and image assets: see `assets/images` and `assets/sounds`
 
 ## License
 
