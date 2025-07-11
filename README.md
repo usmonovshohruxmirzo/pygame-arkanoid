@@ -16,6 +16,7 @@ University internship project: `Python-powered Game Development` — an interact
 - **Particle Effects**: For brick breaking, paddle/ball collisions, and fireworks
 - **Laser Cannons**: Shoot bricks when powered up
 - **Responsive Controls** and smooth gameplay
+- **Textured Graphics**: High-quality textures for bricks, paddle, and game elements
 
 ## Requirements
 
